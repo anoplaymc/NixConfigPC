@@ -17,7 +17,7 @@
             };
           };
           root = {
-            size = "50G";
+            size = "150G"; # Expanded from 50G to prevent filling up /nix/store
             content = {
               type = "filesystem";
               format = "ext4";

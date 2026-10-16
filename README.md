@@ -1,1 +1,1 @@
-git clone https://github.com/anoplaymc/NixConfigPC && cd NixConfigPC && sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount ./disk.nix && sudo nixos-install --root /mnt --flake .#nixos
+git clone https://github.com/anoplaymc/NixConfigPC && cd NixConfigPC && sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount ./disk.nix && sudo nixos-generate-config --no-filesystems --root /mnt --dir . && sudo nixos-install --root /mnt --flake .#nixos

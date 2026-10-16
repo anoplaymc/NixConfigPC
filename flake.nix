@@ -30,7 +30,6 @@
       ...
     }@inputs:
     {
-      # Matches networking.hostName = "nixos" in configuration.nix
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [

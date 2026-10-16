@@ -9,7 +9,6 @@
     ./default.nix
     ./disk.nix
     ./hardware-configuration.nix
-
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -20,11 +19,6 @@
   boot.kernelPackages = pkgs.linuxPackages;
 
   networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -34,7 +28,6 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "kk_KZ.UTF-8";
     LC_IDENTIFICATION = "kk_KZ.UTF-8";
@@ -48,7 +41,6 @@
   };
 
   # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
   services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
@@ -72,25 +64,19 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    # jack.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define a user account.
   users.users."anoplay" = {
     isNormalUser = true;
     description = "anoplay";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       kdePackages.kate
-    #  thunderbird
     ];
   };
 
-  #flakes
+  # Flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Install firefox.
@@ -100,13 +86,12 @@
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile.
-  # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
     zsh
     qemu
     virt-manager
     OVMF
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    vim
     cairomm
     wget
     flatpak
@@ -119,87 +104,41 @@
     (builtins.getFlake "github:areofyl/fetch").packages.${pkgs.system}.default
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  system.stateVersion = "26.05";
 
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
-
-  # This option defines the first version of NixOS you have installed on this particular machine,
-  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
-  #
-  # Most users should NEVER change this value after the initial install, for any reason,
-  # even if you've upgraded your system to a new NixOS release.
-  #
-  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
-  # to actually do that.
-  #
-  # This value being lower than the current NixOS release does NOT mean your system is
-  # out of date, out of support, or vulnerable.
-  #
-  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
-  # and migrated your data accordingly.
-  #
-  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "26.05"; # Did you read the comment?
-# Включаем Hyprland и XWayland
+  # Hyprland and XWayland
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
   };
 
-  # Поддержка порталов для нормальной работы окон и скриншотов
+  # Portals
   xdg.portal = {
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
   };
 
-# Enable OpenGL / graphics
+  # Enable OpenGL / graphics & Nvidia
   hardware.graphics.enable = true;
-
-  # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = [ "nvidia" ];
 
-hardware.nvidia = {
+  hardware.nvidia = {
     modesetting.enable = true;
     open = false;
     nvidiaSettings = true;
-    
-    # Try switching between stable, production, or legacy if available
     package = config.boot.kernelPackages.nvidiaPackages.production;
   };
 
+  fonts = {
+    fontconfig.enable = true;
+    packages = with pkgs; [
+      nerd-fonts.jetbrains-mono
+    ];
+  };
 
-fonts = {
-  fontconfig.enable = true;
-  packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-  ];
-};
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
 
-virtualisation.libvirtd.enable = true;
-programs.virt-manager.enable = true;
-
-virtualisation.virtualbox.host.enable = true;
-users.extraGroups.vboxusers.members = [ "anoplay" ];
-
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "anoplay" ];
 }

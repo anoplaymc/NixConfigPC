@@ -6,7 +6,6 @@
 
 {
   imports = [
-    ./default.nix
     ./disk.nix
     ./hardware-configuration.nix
   ];
@@ -92,7 +91,6 @@
     virt-manager
     OVMF
     vim
-    cairomm
     wget
     flatpak
     wofi

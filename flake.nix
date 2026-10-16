@@ -17,14 +17,6 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
 
-    hjem-rum = {
-      url = "github:snugnug/hjem-rum";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    hjem.follows = "hjem-rum/hjem";
-    helium.url = "github:AlvaroParker/helium-nix";
-
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -44,10 +36,10 @@
         modules = [
           { nixpkgs.hostPlatform = "x86_64-linux"; }
           ./configuration.nix
+          ./hardware-configuration.nix
+          ./disk.nix
           inputs.disko.nixosModules.disko
           inputs.determinate.nixosModules.default
-          inputs.hjem.nixosModules.default
-          ./Hjem/Main.nix
         ];
       };
     };

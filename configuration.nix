@@ -11,8 +11,8 @@
     ];
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+#  boot.loader.systemd-boot.enable = false;
+#  boot.loader.efi.canTouchEfiVariables = true;
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages;
@@ -104,13 +104,16 @@
     qemu
     virt-manager
     OVMF
+    awww
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     cairomm
     wget
+    waybar
     flatpak
     wofi
     telegram-desktop
     discord
+    hyprlock
     kitty
     fastfetch
     git
@@ -199,5 +202,17 @@ programs.virt-manager.enable = true;
 
 virtualisation.virtualbox.host.enable = true;
 users.extraGroups.vboxusers.members = [ "anoplay" ];
+boot.loader = {
+  efi = {
+    canTouchEfiVariables = true;
+    efiSysMountPoint = "/boot"; # или /boot/efi в зависимости от вашей разметки
+  };
+  grub = {
+    enable = true;
+    efiSupport = true;
+    device = "nodev"; # "nodev" используется для UEFI систем
+    useOSProber = true; # включает поиск других ОС (например, Windows)
+  };
+};
 
 }

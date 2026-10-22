@@ -2,4 +2,4 @@
 ## 1. Prepare for building
 (by NixOS manual)
 ## 2. Build
-sudo NIX_CONFIG="experimental-features = nix-command flakes" nixos-install
+sudo nixos-install --flake /mnt/etc/nixos#nixos

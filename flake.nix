@@ -1,5 +1,5 @@
 {
-  description = "NixOS Flake";
+  description = "NixOS Flake Configuration";
 
   nixConfig = {
     extra-substituters = [
@@ -16,6 +16,9 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
+    
+    # Добавляем твой репозиторий сюда:
+    fetch.url = "github:areofyl/fetch";
 
     disko = {
       url = "github:nix-community/disko";
@@ -27,6 +30,7 @@
     {
       self,
       nixpkgs,
+      fetch, 
       ...
     }@inputs:
     {
@@ -36,8 +40,6 @@
           { nixpkgs.hostPlatform = "x86_64-linux"; }
           ./configuration.nix
           ./hardware-configuration.nix
-          ./disk.nix
-          inputs.disko.nixosModules.disko
           inputs.determinate.nixosModules.default
         ];
       };
